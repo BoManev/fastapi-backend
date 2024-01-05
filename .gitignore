@@ -1,0 +1,13 @@
+.vscode/
+.env
+dump.sql
+.Pipfile.lock
+**/__pycache__
+.pytest_cache/
+rec_engine/data/sample_prototype/archive.zip
+.idea
+img/
+uml.png
+logs/
+.DS_Store
+.ruff_cache/

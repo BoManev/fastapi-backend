@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?><database name="sitesync" schema="public" type="PostgreSQL - 16.0 (Debian 16.0-1.pgdg120+1)">
+   <sequences>
+      <sequence increment="1" name="work_units_id_seq" startValue="1"/>
+   </sequences>
+   <tables>
+      <table name="booking_images" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="uri" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="caption" nullable="true" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="2" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="booking_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="id" foreignKey="booking_images_booking_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="bookings"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="booking_images_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="booking_invites" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <child column="booking_invite_id" foreignKey="quotes_booking_invite_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="quotes"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="booking_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="id" foreignKey="booking_invites_booking_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="bookings"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="contractor_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="id" foreignKey="booking_invites_contractor_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="contractors"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="accepted" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="rejected" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <primaryKey column="booking_id" sequenceNumberInPK="1"/>
+         <primaryKey column="contractor_id" sequenceNumberInPK="2"/>
+         <index name="booking_invites_pkey" unique="true">
+            <column ascending="true" name="booking_id"/>
+            <column ascending="true" name="contractor_id"/>
+         </index>
+         <index name="booking_invites_id_key" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="booking_units" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="work_unit_id" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="booking_units_work_unit_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="work_units"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quantity" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="description" nullable="true" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <child column="booking_unit_id" foreignKey="quote_items_booking_unit_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="quote_items"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="booking_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="id" foreignKey="booking_units_booking_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="bookings"/>
+         </column>
+         <primaryKey column="work_unit_id" sequenceNumberInPK="1"/>
+         <primaryKey column="booking_id" sequenceNumberInPK="2"/>
+         <index name="booking_units_pkey" unique="true">
+            <column ascending="true" name="work_unit_id"/>
+            <column ascending="true" name="booking_id"/>
+         </index>
+         <index name="booking_units_id_key" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="bookings" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="title" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="zipcode" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="address" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <child column="booking_id" foreignKey="booking_images_booking_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="booking_images"/>
+            <child column="booking_id" foreignKey="booking_invites_booking_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="booking_invites"/>
+            <child column="booking_id" foreignKey="booking_units_booking_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="booking_units"/>
+            <child column="booking_id" foreignKey="projects_booking_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="projects"/>
+            <child column="booking_id" foreignKey="quotes_booking_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="quotes"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="homeowner_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="id" foreignKey="bookings_homeowner_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="homeowners"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="5" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="is_active" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="is_booked" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="bookings_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="contractor_analytics" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="tasks" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="completed_projects" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="reviews" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="contractor_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="id" foreignKey="contractor_analytics_contractor_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="contractors"/>
+         </column>
+         <primaryKey column="contractor_id" sequenceNumberInPK="1"/>
+         <index name="contractor_analytics_pkey" unique="true">
+            <column ascending="true" name="contractor_id"/>
+         </index>
+      </table>
+      <table name="contractor_area_preferences" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="area" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="contractor_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="id" foreignKey="contractor_area_preferences_contractor_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="contractors"/>
+         </column>
+         <primaryKey column="area" sequenceNumberInPK="1"/>
+         <primaryKey column="contractor_id" sequenceNumberInPK="2"/>
+         <index name="contractor_area_preferences_pkey" unique="true">
+            <column ascending="true" name="area"/>
+            <column ascending="true" name="contractor_id"/>
+         </index>
+      </table>
+      <table name="contractor_profession_preferences" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="work_unit_id" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="contractor_profession_preferences_work_unit_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="work_units"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="contractor_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="id" foreignKey="contractor_profession_preferences_contractor_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="contractors"/>
+         </column>
+         <primaryKey column="work_unit_id" sequenceNumberInPK="1"/>
+         <primaryKey column="contractor_id" sequenceNumberInPK="2"/>
+         <index name="contractor_profession_preferences_pkey" unique="true">
+            <column ascending="true" name="work_unit_id"/>
+            <column ascending="true" name="contractor_id"/>
+         </index>
+      </table>
+      <table name="contractor_reviews" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="quality_rating" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="budget_rating" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="on_schedule_rating" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="booking_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="booking_id" foreignKey="contractor_reviews_booking_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="projects"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="to_" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="id" foreignKey="contractor_reviews_to__fkey" implied="false" onDeleteCascade="false" schema="public" table="contractors"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="from_" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="id" foreignKey="contractor_reviews_from__fkey" implied="false" onDeleteCascade="false" schema="public" table="homeowners"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="budget_words" nullable="true" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="quality_words" nullable="true" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="schedule_words" nullable="true" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="description" nullable="true" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="10" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <primaryKey column="booking_id" sequenceNumberInPK="1"/>
+         <primaryKey column="to_" sequenceNumberInPK="2"/>
+         <primaryKey column="from_" sequenceNumberInPK="3"/>
+         <index name="contractor_reviews_pkey" unique="true">
+            <column ascending="true" name="booking_id"/>
+            <column ascending="true" name="to_"/>
+            <column ascending="true" name="from_"/>
+         </index>
+      </table>
+      <table name="contractors" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="quality_rating" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="budget_rating" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="on_schedule_rating" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <child column="contractor_id" foreignKey="booking_invites_contractor_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="booking_invites"/>
+            <child column="contractor_id" foreignKey="contractor_analytics_contractor_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="contractor_analytics"/>
+            <child column="contractor_id" foreignKey="contractor_area_preferences_contractor_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="contractor_area_preferences"/>
+            <child column="contractor_id" foreignKey="contractor_profession_preferences_contractor_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="contractor_profession_preferences"/>
+            <child column="to_" foreignKey="contractor_reviews_to__fkey" implied="false" onDeleteCascade="false" schema="public" table="contractor_reviews"/>
+            <child column="contractor_id" foreignKey="external_portfolio_projects_contractor_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="external_portfolio_projects"/>
+            <child column="from_" foreignKey="homeowner_reviews_from__fkey" implied="false" onDeleteCascade="false" schema="public" table="homeowner_reviews"/>
+            <child column="contractor_id" foreignKey="projects_contractor_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="projects"/>
+            <parent column="id" foreignKey="contractors_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="first_name" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="last_name" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="bio" nullable="true" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="avatar_uri" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="contractors_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="external_portfolio_images" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="uri" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="caption" nullable="true" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="2" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="portfolio_project_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="id" foreignKey="external_portfolio_images_portfolio_project_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="external_portfolio_projects"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="external_portfolio_images_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="external_portfolio_project_tasks" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="work_unit_id" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="id" foreignKey="external_portfolio_project_tasks_work_unit_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="work_units"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="portfolio_project_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="id" foreignKey="external_portfolio_project_tasks_portfolio_project_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="external_portfolio_projects"/>
+         </column>
+         <primaryKey column="work_unit_id" sequenceNumberInPK="1"/>
+         <primaryKey column="portfolio_project_id" sequenceNumberInPK="2"/>
+         <index name="external_portfolio_project_tasks_pkey" unique="true">
+            <column ascending="true" name="work_unit_id"/>
+            <column ascending="true" name="portfolio_project_id"/>
+         </index>
+      </table>
+      <table name="external_portfolio_projects" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <child column="portfolio_project_id" foreignKey="external_portfolio_images_portfolio_project_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="external_portfolio_images"/>
+            <child column="portfolio_project_id" foreignKey="external_portfolio_project_tasks_portfolio_project_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="external_portfolio_project_tasks"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="contractor_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="id" foreignKey="external_portfolio_projects_contractor_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="contractors"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="2" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="title" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="description" nullable="true" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="zipcode" nullable="true" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="external_portfolio_projects_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="homeowner_reviews" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="booking_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="booking_id" foreignKey="homeowner_reviews_booking_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="projects"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="to_" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="id" foreignKey="homeowner_reviews_to__fkey" implied="false" onDeleteCascade="false" schema="public" table="homeowners"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="from_" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="id" foreignKey="homeowner_reviews_from__fkey" implied="false" onDeleteCascade="false" schema="public" table="contractors"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="rating_words" nullable="true" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="rating" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="description" nullable="true" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="6" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <primaryKey column="booking_id" sequenceNumberInPK="1"/>
+         <primaryKey column="to_" sequenceNumberInPK="2"/>
+         <primaryKey column="from_" sequenceNumberInPK="3"/>
+         <index name="homeowner_reviews_pkey" unique="true">
+            <column ascending="true" name="booking_id"/>
+            <column ascending="true" name="to_"/>
+            <column ascending="true" name="from_"/>
+         </index>
+      </table>
+      <table name="homeowners" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="first_name" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="last_name" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <child column="homeowner_id" foreignKey="bookings_homeowner_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="bookings"/>
+            <child column="from_" foreignKey="contractor_reviews_from__fkey" implied="false" onDeleteCascade="false" schema="public" table="contractor_reviews"/>
+            <child column="to_" foreignKey="homeowner_reviews_to__fkey" implied="false" onDeleteCascade="false" schema="public" table="homeowner_reviews"/>
+            <parent column="id" foreignKey="homeowners_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="avatar_uri" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="rating" nullable="false" remarks="" size="10" type="int4" typeCode="4"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="homeowners_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="material_units" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="quote_item_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="id" foreignKey="material_units_quote_item_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="quote_items"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="3" id="2" name="cost" nullable="true" remarks="" size="8" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="description" nullable="true" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="material_units_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="project_images" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="uri" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="caption" nullable="true" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="2" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="booking_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="booking_id" foreignKey="project_images_booking_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="projects"/>
+         </column>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="project_images_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="projects" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="booking_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <child column="booking_id" foreignKey="contractor_reviews_booking_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="contractor_reviews"/>
+            <child column="booking_id" foreignKey="homeowner_reviews_booking_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="homeowner_reviews"/>
+            <child column="booking_id" foreignKey="project_images_booking_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="project_images"/>
+            <parent column="id" foreignKey="projects_booking_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="bookings"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="contractor_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="id" foreignKey="projects_contractor_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="contractors"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="2" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="3" name="completed_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="signal_completion" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="is_public" nullable="false" remarks="" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="is_active" nullable="false" remarks="" size="1" type="bool" typeCode="-7"/>
+         <primaryKey column="booking_id" sequenceNumberInPK="1"/>
+         <index name="projects_pkey" unique="true">
+            <column ascending="true" name="booking_id"/>
+         </index>
+      </table>
+      <table name="quote_items" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <child column="quote_item_id" foreignKey="material_units_quote_item_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="material_units"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="qoute_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="id" foreignKey="quote_items_qoute_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="quotes"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="booking_unit_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="id" foreignKey="quote_items_booking_unit_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="booking_units"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="3" id="3" name="work_hours" nullable="true" remarks="" size="8" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="null" digits="3" id="4" name="work_rate" nullable="true" remarks="" size="8" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="null" digits="3" id="5" name="work_cost" nullable="true" remarks="" size="8" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="description" nullable="true" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="7" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="8" name="modified_at" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="status" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="is_active" nullable="false" remarks="" size="1" type="bool" typeCode="-7"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="quote_items_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="quotes" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <child column="qoute_id" foreignKey="quote_items_qoute_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="quote_items"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="booking_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="id" foreignKey="quotes_booking_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="bookings"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="booking_invite_id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <parent column="id" foreignKey="quotes_booking_invite_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="booking_invites"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="3" name="created_at" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="accepted" nullable="false" remarks="" size="1" type="bool" typeCode="-7"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="quotes_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+      </table>
+      <table name="users" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="email" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="phone_number" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="id" nullable="false" remarks="" size="2147483647" type="uuid" typeCode="1111">
+            <child column="id" foreignKey="contractors_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="contractors"/>
+            <child column="id" foreignKey="homeowners_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="homeowners"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="password" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="admin" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="role" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <primaryKey column="email" sequenceNumberInPK="1"/>
+         <index name="users_pkey" unique="true">
+            <column ascending="true" name="email"/>
+         </index>
+         <index name="users_id_key" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="users_phone_number_key" unique="true">
+            <column ascending="true" name="phone_number"/>
+         </index>
+      </table>
+      <table name="work_units" remarks="" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('work_units_id_seq'::regclass)" digits="0" id="0" name="id" nullable="false" remarks="" size="10" type="serial" typeCode="4">
+            <child column="work_unit_id" foreignKey="booking_units_work_unit_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="booking_units"/>
+            <child column="work_unit_id" foreignKey="contractor_profession_preferences_work_unit_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="contractor_profession_preferences"/>
+            <child column="work_unit_id" foreignKey="external_portfolio_project_tasks_work_unit_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="external_portfolio_project_tasks"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="area" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="location" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="category" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="subcategory" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="action" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="quantity" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="profession" nullable="false" remarks="" size="2147483647" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="md5((((((((area)::text || (location)::text) || (category)::text) || (subcategory)::text) || (action)::text) || (quantity)::text) || (profession)::text))" digits="0" id="8" name="digest" nullable="true" remarks="" size="2147483647" type="text" typeCode="12"/>
+         <primaryKey column="id" sequenceNumberInPK="1"/>
+         <index name="work_units_pkey" unique="true">
+            <column ascending="true" name="id"/>
+         </index>
+         <index name="ensure_unique_work_unit" unique="true">
+            <column ascending="true" name="digest"/>
+         </index>
+      </table>
+   </tables>
+</database>

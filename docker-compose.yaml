@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+  db-service:
+    image: postgres:16
+    env_file:
+      - .env
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    networks:
+      - app-network
+    hostname: ${POSTGRES_HOST}
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+
+  backend-service:
+    tty: true
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "${API_PORT}:80"
+    depends_on:
+      - db-service
+    networks:
+      - app-network
+    volumes:
+      - type: bind
+        source: ./test
+        target: /home/sitesync/test
+      - type: bind
+        source: ./api
+        target: /home/sitesync/api
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+    command: ["python", "-m", "api"]
+    
+
+networks:
+  app-network:
+    driver: bridge
